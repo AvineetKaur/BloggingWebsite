@@ -9,7 +9,6 @@ export const userRouter = new Hono<{
         DATABASE_URL: string,
         JWT_SECRET: string
     },
-
 }>();
 
 //sign up route for user
@@ -33,7 +32,7 @@ userRouter.post('/signup', async (c) => {
             jwt: token
         })
     } catch (e) {
-        return c.json({ error: e })
+        return c.json({ error: String(e) })
     }
 })
 
