@@ -15,16 +15,16 @@ export const blogRouter = new Hono<{
 }>();
 
 //middleware
-blogRouter.use('/api/v1/blog/*', async (c, next) => {
+blogRouter.use('/*', async (c, next) => {
     //get the header
-    const header = c.req.header("Authorisation") || "";
+    const header = c.req.header("Authorization") || "";
     const token = header.split(" ")[1];
 
     //verify the token
-    const id = await verify(token, c.env.JWT_SECRET);
-    if (id) {
-        c.set("userId", String(id));
-        next()
+    const user = await verify(token, c.env.JWT_SECRET);
+    if (user) {
+        c.set("userId", String(user.id))
+        await next()
     }
     else {
         return c.json({
@@ -48,14 +48,14 @@ blogRouter.post('/', async (c) => {
             data: {
                 title: body.title,
                 content: body.content,
-                authorID: authorID
+                authorID: Number(authorID)
             }
         })
         return c.json({
             id: blog.id
         })
     } catch (e) {
-        return c.json({ error: e })
+        return c.json({ error: String(e) })
     }
 })
 
@@ -78,21 +78,6 @@ blogRouter.put('/', async (c) => {
     return c.json({ id: blog.id });
 })
 
-//search one blog
-blogRouter.get('/', async (c) => {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
-    }).$extends(withAccelerate());
-
-    const body = await c.req.json();
-    const blog = await prisma.post.findFirst({
-        where: {
-            id: body.id
-        }
-    })
-    return c.json({ blog });
-})
-
 //get all blogs at home page
 blogRouter.get('/bulk', async (c) => {
     const prisma = new PrismaClient({
@@ -103,3 +88,20 @@ blogRouter.get('/bulk', async (c) => {
     //add pagintaion
     return c.json({ blogs })
 })
+
+//search one blog
+blogRouter.get('/:id', async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    const id = c.req.param("id");
+    const blog = await prisma.post.findFirst({
+        where: {
+            id: Number(id)
+        }
+    })
+    return c.json({ blog });
+})
+
+
