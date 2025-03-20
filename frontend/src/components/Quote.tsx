@@ -3,31 +3,18 @@ export const Quote = () => {
         <div className="bg-slate-200 h-screen flex justify-center flex-col ">
             <div className="flex  justify-center">
                 <div className="max-w-lg">
-                    <div className=" bg-amber-300">
-                        The customer support I received was exceptional. The support team went above and beyond to address my concerns.
+                    <div className="font-bold text-2xl">
+                        "The customer support I received was exceptional. The support team went above and beyond to address my concerns. "
                     </div>
-
-                    <div className="bg-red-400">
+                    <div className="text-xl font-semibold">
                         helllo
                     </div>
-                    <div className="bg-blue-400">
+                    <div className="text-gray-700 font-medium" >
                         hjk;l;
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
-
-        {/* <div className="bg-slate-200 h-screen flex justify-center flex-col" >
-            <div className="flex justify-center">
-                <div className="max-w-md  text-2xl font-bold">
-                    "The customer support I received was exceptional. The support team went above and beyond to address my concerns."
-                </div>
-            </div>
-        </div> */}
 
     </>)
 }
